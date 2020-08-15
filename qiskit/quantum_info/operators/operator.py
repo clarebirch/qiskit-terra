@@ -199,7 +199,16 @@ class Operator(BaseOperator):
         # pylint: disable=cyclic-import
         from qiskit.extensions.unitary import UnitaryGate
         return UnitaryGate(self.data)
-
+    
+    def to_gate(self):
+        """Convert to a UnitaryGate gate, and throw an error if the gate is NOT unitary."""
+        # pylint: disable=cyclic-import
+        from qiskit.extensions.unitary import UnitaryGate
+        if not is_unitary_matrix(self.data):
+            sys.exit("This is not unitary. Use to_instruction rather than to_gate to proceed with a non-unitary operation.")
+        else:
+            return UnitaryGate(self.data)
+    
     def conjugate(self):
         """Return the conjugate of the operator."""
         # Make a shallow copy and update array
